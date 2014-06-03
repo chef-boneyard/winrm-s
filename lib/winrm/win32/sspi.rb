@@ -229,6 +229,8 @@ EOF
         if @auth_successful
 
           matched_data = /--Encrypted Boundary\s+Content-Type:\s+application\/HTTP-SPNEGO-session-encrypted\s+OriginalContent:\s+type=\S+Length=(\d+)\s+--Encrypted Boundary\s+Content-Type:\s+application\/octet-stream\s+([\S\s]+)--Encrypted Boundary/.match(body)
+          raise "Error: Unencrypted communication not supported. Please check winrm configuration winrm/config/service AllowUnencrypted flag." if matched_data.nil?
+
           encrypted_msg = matched_data[2]
 
           outputBuffer = DecryptedSecurityBuffer.new(encrypted_msg)
