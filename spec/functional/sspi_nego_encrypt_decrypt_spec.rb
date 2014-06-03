@@ -5,9 +5,13 @@ require 'spec_helper'
 end
 
 describe "Test sspinegotiate with encrypt/decrypt via WinRM", :windows_only do
-  before(:all) do
-
+  before do
+    %x{winrm set winrm/config/service @{AllowUnencrypted="false"}}
     @winrm = WinRM::WinRMWebService.new(ENV["test_winrm_endpoint"], :sspinegotiate, :user => ENV["test_winrm_user"], :pass => ENV["test_winrm_pass"])
+  end
+
+  after do
+    %x{winrm set winrm/config/service @{AllowUnencrypted="true"}}
   end
 
   it 'should run a CMD command string' do
@@ -28,5 +32,20 @@ describe "Test sspinegotiate with encrypt/decrypt via WinRM", :windows_only do
       outvar << stdout
     end
     outvar.should =~ /Windows IP Configuration/
+  end
+
+  describe "Negative test:" do
+    before do
+      %x{winrm set winrm/config/service @{AllowUnencrypted="true"}}
+    end
+    after do
+      %x{winrm set winrm/config/service @{AllowUnencrypted="false"}}
+    end
+
+    describe "when AllowUnencrypted is set to true" do
+      it "should raise an exception" do
+        expect{@winrm.run_cmd('ipconfig')}.to raise_exception
+      end
+    end
   end
 end
