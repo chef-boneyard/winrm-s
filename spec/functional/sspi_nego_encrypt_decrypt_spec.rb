@@ -1,7 +1,9 @@
 require 'spec_helper'
 
-["test_winrm_endpoint", "test_winrm_user", "test_winrm_pass"].each do |env_var|
-  raise "\n\nError: Please set the environment variable: #{env_var}\n\n" if ENV[env_var].nil?
+if windows?
+  ["test_winrm_endpoint", "test_winrm_user", "test_winrm_pass"].each do |env_var|
+    raise "\n\nError: Please set the environment variable: #{env_var}\n\n" if ENV[env_var].nil?
+  end
 end
 
 describe "Test sspinegotiate with encrypt/decrypt via WinRM", :windows_only do
