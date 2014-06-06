@@ -18,14 +18,14 @@ describe "Test sspinegotiate with encrypt/decrypt via WinRM", :windows_only do
 
   it 'should run a CMD command string' do
     output = @winrm.run_cmd('ipconfig /all')
-    output[:exitcode].should == 0
-    output[:data].should_not be_empty
+    expect(output[:exitcode]).to be_zero
+    expect(output[:data]).not_to be_empty
   end
 
   it 'should run a CMD command with proper arguments' do
     output = @winrm.run_cmd('ipconfig', %w{/all})
-    output[:exitcode].should == 0
-    output[:data].should_not be_empty
+    expect(output[:exitcode]).to be_zero
+    expect(output[:data]).not_to be_empty
   end
 
   it 'should run a CMD command with block' do
@@ -33,7 +33,7 @@ describe "Test sspinegotiate with encrypt/decrypt via WinRM", :windows_only do
     @winrm.run_cmd('ipconfig', %w{/all}) do |stdout, stderr|
       outvar << stdout
     end
-    outvar.should =~ /Windows IP Configuration/
+    expect(outvar).to match(/Windows IP Configuration/)
   end
 
   describe "Negative test:" do

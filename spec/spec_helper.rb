@@ -11,7 +11,6 @@ def unix?
 end
 
 RSpec.configure do |config|
-  config.treat_symbols_as_metadata_keys_with_true_values = true
   config.filter_run_excluding :windows_only => true unless windows?
   config.filter_run_excluding :unix_only => true unless unix?
 end
