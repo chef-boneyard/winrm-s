@@ -1,6 +1,7 @@
 $:.unshift File.expand_path('../../lib', __FILE__)
 
 require 'winrm-s'
+require 'nokogiri'
 
 def windows?
   !!(RUBY_PLATFORM =~ /mswin|mingw|windows/)

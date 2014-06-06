@@ -6,14 +6,20 @@ if windows?
   end
 end
 
+# Remember the user setting.
+winrm_cfg = %x{winrm get winrm/config/service -format:xml}
+doc = Nokogiri::XML(winrm_cfg)
+original_allowunencrypted_val = doc.at_css("cfg|Service cfg|AllowUnencrypted").text.to_s
+
+
 describe "Test sspinegotiate with encrypt/decrypt via WinRM", :windows_only do
   before do
     %x{winrm set winrm/config/service @{AllowUnencrypted="false"}}
     @winrm = WinRM::WinRMWebService.new(ENV["test_winrm_endpoint"], :sspinegotiate, :user => ENV["test_winrm_user"], :pass => ENV["test_winrm_pass"])
   end
 
-  after do
-    %x{winrm set winrm/config/service @{AllowUnencrypted="true"}}
+  after(:all) do
+    %x{winrm set winrm/config/service @{AllowUnencrypted="#{original_allowunencrypted_val}"}}
   end
 
   it 'should run a CMD command string' do
