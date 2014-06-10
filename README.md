@@ -19,6 +19,19 @@ Usage
 `winrm-s` provides the same interface as the `winrm` gem -- see `winrm`
 [documentation](https://github.com/WinRb/WinRM/blob/master/README.md) for `winrm-s` usage.
 
+Example
+-------
+Note the argument value of **:sspinegotiate** for transport option.
+```ruby
+require 'winrm-s'
+endpoint = http://mywinrmhost:5985/wsman
+winrm = WinRM::WinRMWebService.new(endpoint, :sspinegotiate, :user => ".\administrator", :pass => "adminpasswd")
+winrm.cmd('ipconfig /all') do |stdout, stderr|
+  STDOUT.print stdout
+  STDERR.print stderr
+end
+```
+
 License
 -------
 
