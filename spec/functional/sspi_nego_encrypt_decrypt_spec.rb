@@ -1,6 +1,7 @@
 require 'spec_helper'
 
 if windows?
+  require 'winrm-s'
   ["test_winrm_endpoint", "test_winrm_user", "test_winrm_pass"].each do |env_var|
     raise "\n\nError: Please set the environment variable: #{env_var}\n\n" if ENV[env_var].nil?
   end

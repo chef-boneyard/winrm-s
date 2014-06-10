@@ -9,5 +9,5 @@ end
 if windows?
   require 'winrm/winrm_service_patch'
 else
-  puts "INFO: winrm-s does not monkey patch the winrm gem in *nix. You will continue to use winrm gem as is."
+  raise "ERROR: winrm-s does not monkey patch the winrm gem in *nix. You should use winrm gem on *nix."
 end
