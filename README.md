@@ -6,6 +6,10 @@ winrm-s
 [Negotiate protocol](http://msdn.microsoft.com/en-us/library/windows/desktop/aa378748(v=vs.85).aspx)
 when authenticating to a remote [WinRM](http://msdn.microsoft.com/en-us/library/aa384426(v=vs.85).aspx) endpoint from a Windows system.
 
+This extended functionality is **only** supported when running on Microsoft
+Windows. This gem can still be used on other operating systems just like the
+`WinRM` gem, but the extended capabilities will not be available.
+
 Installation
 ------------
 
@@ -19,16 +23,29 @@ Usage
 `winrm-s` provides the same interface as the `winrm` gem -- see `winrm`
 [documentation](https://github.com/WinRb/WinRM/blob/master/README.md) for `winrm-s` usage.
 
+* To use it, simply require `winrm` or `winrm-s`, depending on whether your code
+is running on Windows. The extended negotiate protocol is only available if
+you include `winrm-s`, which will only work on Windows.
+* When you use WinRM::WinRMWebService.new, be sure to specify the
+  `:sspinegotiate` parameter, along with a user name in the form `domain_name\user_name`
+  for the user name in order to make use of negotiate protocol. If the user
+  account is local to the remote system, you can use `.` for the domain. The
+  example further on demonstrates the negotiate use case.
+* All other use cases enabled by the `winrm` gem are also supported.
+
 Example
 -------
-Note the argument value of **:sspinegotiate** for transport option.
+Note the argument value of `:sspinegotiate` for transport option, and the
+explicit specification of a domain name, in this case `.`, in the user name:
 ```ruby
-require 'winrm-s'
-endpoint = http://mywinrmhost:5985/wsman
-winrm = WinRM::WinRMWebService.new(endpoint, :sspinegotiate, :user => ".\administrator", :pass => "adminpasswd")
-winrm.cmd('ipconfig /all') do |stdout, stderr|
-  STDOUT.print stdout
-  STDERR.print stderr
+if RUBY_PLATFORM =~ /mswin|mingw32|windows/
+  require 'winrm-s' # only works on Windows, otherwise use require 'winrm'
+  endpoint = http://mywinrmhost:5985/wsman
+  winrm = WinRM::WinRMWebService.new(endpoint, :sspinegotiate, :user => ".\administrator", :pass => "adminpasswd")
+  winrm.cmd('ipconfig /all') do |stdout, stderr|
+    STDOUT.print stdout
+    STDERR.print stderr
+  end
 end
 ```
 
