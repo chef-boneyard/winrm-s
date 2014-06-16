@@ -1,15 +1,18 @@
 require 'spec_helper'
 
-if windows?
-  require 'winrm-s'
-  ["test_winrm_endpoint", "test_winrm_user", "test_winrm_pass"].each do |env_var|
-    raise "\n\nError: Please set the environment variable: #{env_var}\n\n" if ENV[env_var].nil?
+def assert_prerequisites
+  if windows?
+    require 'winrm-s'
+    ["test_winrm_endpoint", "test_winrm_user", "test_winrm_pass"].each do |env_var|
+      raise "\n\nError: Please set the environment variable: #{env_var}\n\n" if ENV[env_var].nil?
+    end
   end
 end
 
 
-describe "Test sspinegotiate with encrypt/decrypt via WinRM", :windows_only do
+describe "Test sspinegotiate with encrypt/decrypt via WinRM", :windows_and_func_spec_enabled do
   before(:all) do
+    assert_prerequisites
     # Remember the user setting.
     winrm_cfg = %x{winrm get winrm/config/service -format:xml}
     doc = Nokogiri::XML(winrm_cfg)
