@@ -25,7 +25,7 @@ def validate_patch
   # for encrypt/decrypt as described below.
   # Add few restriction to make sure the patched methods are still
   # available, but still give a way to consciously use later versions
-  PatchAssertions.assert_major_version("httpclient", 2.3, "USE_HTTPCLIENT_MAJOR")
+  PatchAssertions.assert_major_version("httpclient", 2.4, "USE_HTTPCLIENT_MAJOR")
   PatchAssertions.assert_arity_of_patched_method(HTTPClient::WWWAuth, "filter_request", 1)
   PatchAssertions.assert_arity_of_patched_method(HTTPClient::WWWAuth, "filter_response", 2)
   PatchAssertions.assert_arity_of_patched_method(HTTPClient::SSPINegotiateAuth, "set", -1)
