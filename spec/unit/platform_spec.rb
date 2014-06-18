@@ -9,7 +9,7 @@ describe "Test if patch is applied on Platform" do
       @winrm = WinRM::WinRMWebService.new("http://mywinrmhost:5985/wsman", :sspinegotiate, :user => "test_winrm_user", :pass => "test_winrm_pass")
     end
 
-    it 'HTTP::HttpSSPINegotiate class should exists' do
+    it 'HTTP::HttpSSPINegotiate class should exist' do
       expect{WinRM::HTTP::HttpSSPINegotiate}.not_to raise_exception
     end
 
