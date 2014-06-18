@@ -9,7 +9,7 @@ Gem::Specification.new do |s|
   s.has_rdoc = true
   s.extra_rdoc_files = ["README.md", "LICENSE" ]
   s.authors     = ["Kaustubh Deorukhkar"]
-  s.email       = ["kaustubh@clogeny.com"]
+  s.email       = ["dev@getchef.com", "kaustubh@clogeny.com"]
   s.homepage    = "https://github.com/opscode/winrm-s"
   s.summary     = %q{Gem that extends the functionality of the WinRM gem to support the Microsoft Negotiate protocol when authenticating to a remote WinRM endpoint from a Windows system}
   s.description = s.summary
