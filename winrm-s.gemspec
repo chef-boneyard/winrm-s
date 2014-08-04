@@ -14,7 +14,7 @@ Gem::Specification.new do |s|
   s.summary     = %q{Gem that extends the functionality of the WinRM gem to support the Microsoft Negotiate protocol when authenticating to a remote WinRM endpoint from a Windows system}
   s.description = s.summary
 
-  s.add_dependency "winrm", "~> 1.1.3"
+  s.add_dependency "winrm", ">= 1.2"
 
   %w(rspec-core rspec-expectations rspec-mocks rspec_junit_formatter).each { |gem| s.add_development_dependency gem }
 
