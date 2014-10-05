@@ -160,8 +160,8 @@ module Win32
         if user.nil? && domain.nil? && ENV["USERNAME"].nil? && ENV["USERDOMAIN"].nil?
           raise "A username or domain must be supplied since they cannot be retrieved from the environment"
         end
-        @user = user || ENV["USERNAME"]
-        @domain = domain || ENV["USERDOMAIN"]
+        @user = user || ENV["USERNAME"].dup
+        @domain = domain || ENV["USERDOMAIN"].dup
         @password = password
       end
 
