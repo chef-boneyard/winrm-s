@@ -105,6 +105,13 @@ class HTTPClient
       SSPIEnabled = false
     end
 
+    begin
+      require 'gssapi'
+      GSSAPIEnabled = true
+    rescue LoadError
+      GSSAPIEnabled = false
+    end
+
     # Override to remember creds
     # Set authentication credential.
     def set(uri, user, passwd)
@@ -117,12 +124,13 @@ class HTTPClient
     end
 
     def set?
-      SSPIEnabled
+      SSPIEnabled || GSSAPIEnabled
     end
 
     # Response handler: returns credential.
     # See win32/sspi for negotiation state transition.
     def get(req)
+      return nil unless SSPIEnabled || GSSAPIEnabled
       target_uri = req.header.request_uri
       domain_uri, param = @challenge.find { |uri, v|
         Util.uri_part_of(target_uri, uri)
