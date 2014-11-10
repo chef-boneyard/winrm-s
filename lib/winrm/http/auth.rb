@@ -25,7 +25,7 @@ def validate_patch
   # for encrypt/decrypt as described below.
   # Add few restriction to make sure the patched methods are still
   # available, but still give a way to consciously use later versions
-  PatchAssertions.assert_major_version("httpclient", 2.4, "USE_HTTPCLIENT_MAJOR")
+  PatchAssertions.assert_major_version("httpclient", 2.5, "USE_HTTPCLIENT_MAJOR")
   PatchAssertions.assert_arity_of_patched_method(HTTPClient::WWWAuth, "filter_request", 1)
   PatchAssertions.assert_arity_of_patched_method(HTTPClient::WWWAuth, "filter_response", 2)
   PatchAssertions.assert_arity_of_patched_method(HTTPClient::SSPINegotiateAuth, "set", -1)
@@ -97,6 +97,21 @@ class HTTPClient
   end
 
   class SSPINegotiateAuth
+
+    begin
+      require 'win32/sspi'
+      SSPIEnabled = true
+    rescue LoadError
+      SSPIEnabled = false
+    end
+
+    begin
+      require 'gssapi'
+      GSSAPIEnabled = true
+    rescue LoadError
+      GSSAPIEnabled = false
+    end
+
     # Override to remember creds
     # Set authentication credential.
     def set(uri, user, passwd)
@@ -106,6 +121,10 @@ class HTTPClient
         creds.length.eql?(2) ? (@domain,@user = creds) : @user = creds[0]
       end
       @passwd = passwd
+    end
+
+    def set?
+      SSPIEnabled || GSSAPIEnabled
     end
 
     # Response handler: returns credential.
@@ -118,6 +137,7 @@ class HTTPClient
       }
 
       return nil unless param
+
       state = param[:state]
       authenticator = param[:authenticator]
       authphrase = param[:authphrase]
