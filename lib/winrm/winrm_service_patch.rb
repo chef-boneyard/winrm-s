@@ -30,5 +30,60 @@ module WinRM
         @xfer = HTTP::HttpSSL.new(endpoint, opts[:user], opts[:pass], opts[:ca_trust_path], opts)
       end
     end
+
+    # Get the builder obj for output request
+    # @param [String] shell_id The shell id on the remote machine.  See #open_shell
+    # @param [String] command_id The command id on the remote machine.  See #run_command
+    # @return [Builder::XmlMarkup] Returns a Builder::XmlMarkup for request message 
+    def get_builder_obj(shell_id, command_id, &block)
+      body = { "#{NS_WIN_SHELL}:DesiredStream" => 'stdout stderr',
+        :attributes! => {"#{NS_WIN_SHELL}:DesiredStream" => {'CommandId' => command_id}}}
+      builder = Builder::XmlMarkup.new
+      builder.instruct!(:xml, :encoding => 'UTF-8')
+      builder.tag! :env, :Envelope, namespaces do |env|
+        env.tag!(:env, :Header) { |h| h << Gyoku.xml(merge_headers(header,resource_uri_cmd,action_receive,selector_shell_id(shell_id))) }
+        env.tag!(:env, :Body) do |env_body|
+          env_body.tag!("#{NS_WIN_SHELL}:Receive") { |cl| cl << Gyoku.xml(body) }
+        end
+      end
+      builder
+    end
+
+    # Get the Output of the given shell and command
+    # @param [String] shell_id The shell id on the remote machine.  See #open_shell
+    # @param [String] command_id The command id on the remote machine.  See #run_command
+    # @return [Hash] Returns a Hash with a key :exitcode and :data.  Data is an Array of Hashes where the cooresponding key
+    #   is either :stdout or :stderr.  The reason it is in an Array so so we can get the output in the order it ocurrs on
+    #   the console.
+    def get_command_output(shell_id, command_id, &block)
+      done_elems = []
+      while done_elems.empty?
+        resp_doc = nil
+        builder = get_builder_obj(shell_id, command_id, &block)
+        request_msg = builder.target!
+        resp_doc = send_get_output_message(request_msg)
+
+        output = Output.new
+        REXML::XPath.match(resp_doc, "//#{NS_WIN_SHELL}:Stream").each do |n|
+          next if n.text.nil? || n.text.empty?
+          stream = { n.attributes['Name'].to_sym => Base64.decode64(n.text) }
+          output[:data] << stream
+          yield stream[:stdout], stream[:stderr] if block_given?
+        end
+
+        # We may need to get additional output if the stream has not finished.
+        # The CommandState will change from Running to Done like so:
+        # @example
+        #   from...
+        #   <rsp:CommandState CommandId="..." State="http://schemas.microsoft.com/wbem/wsman/1/windows/shell/CommandState/Running"/>
+        #   to...
+        #   <rsp:CommandState CommandId="..." State="http://schemas.microsoft.com/wbem/wsman/1/windows/shell/CommandState/Done">
+        #     <rsp:ExitCode>0</rsp:ExitCode>
+        #   </rsp:CommandState>
+        done_elems = REXML::XPath.match(resp_doc, "//*[@State='http://schemas.microsoft.com/wbem/wsman/1/windows/shell/CommandState/Done']")
+      end
+      output[:exitcode] = REXML::XPath.first(resp_doc, "//#{NS_WIN_SHELL}:ExitCode").text.to_i
+      output
+    end
   end
 end
