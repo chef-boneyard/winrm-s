@@ -1,7 +1,7 @@
 # winrm-s  Change Log
 
 ## Unreleased
-None
+* [Issue #25](https://github.com/opscode/winrm-s/pull/25): [Fix for knife-windows issue 218](https://github.com/opscode/knife-windows/issues/218)
 
 Last release: 0.2.4
 -------------------
