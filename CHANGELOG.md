@@ -1,10 +1,15 @@
 # winrm-s  Change Log
 
-## Unreleased
+Unreleased
+--------------
+
+Release: 0.3.0
+--------------
+* [Issue #21](https://github.com/chef/winrm-s/issues/21): Bumps winrm dependency from 1.2 to 1.3.
 * [Issue #25](https://github.com/opscode/winrm-s/pull/25): [Fix for knife-windows issue 218](https://github.com/opscode/knife-windows/issues/218)
 
-Last release: 0.2.4
--------------------
+Release: 0.2.4
+--------------
 * DOC change only: correct omission from CHANGELOG items in 0.2.3 release
 
 Release: 0.2.3
@@ -24,6 +29,3 @@ Release: 0.2.0
 Release: 0.1.0
 --------------
 * Initial implementation
-
-
-
