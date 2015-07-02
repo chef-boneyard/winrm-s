@@ -87,12 +87,17 @@ class HTTPClient
         decrypted_content = res.content
         @authenticator.each do |auth|
           next unless auth.set? # hasn't be set, don't use it
-          decrypted_content = auth.decrypt_payload(res.content) if auth.respond_to?(:encrypted_channel?) and auth.encrypted_channel?
+          decrypted_content = auth.decrypt_payload(res.content) if auth.respond_to?(:encrypted_channel?) && auth.encrypted_channel? && encrypted_content?(res.content)
         end
         # update with decrypted content
         res.content.replace(decrypted_content) if res.content and !res.content.empty?
       end
       command
+    end
+
+    private
+    def encrypted_content? content
+      content.start_with?('--Encrypted ')
     end
   end
 

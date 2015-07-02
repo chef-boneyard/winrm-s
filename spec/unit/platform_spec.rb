@@ -22,7 +22,7 @@ describe "Test if patch is applied on Platform" do
 
   describe 'Winrm cannot be patched for unix', :unix_only do
     it 'require winrm-s should raise exception' do
-      expect{require 'winrm-s'}.to raise_exception
+      expect{require 'winrm-s'}.to raise_exception RuntimeError
     end
   end
 end
