@@ -2,6 +2,7 @@
 
 Unreleased
 --------------
+* [Issue #27](https://github.com/chef/winrm-s/pull/27): Fixes problem with AllowUnencrypted being true and using negotiate
 
 Release: 0.3.0
 --------------
