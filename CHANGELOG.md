@@ -2,6 +2,11 @@
 Unreleased
 --------------
 
+Release: 0.3.2
+--------------
+* Strip UTF-8 BOM from response added by win2k8R2 since newer WinRM versions now use UTF-8
+* Decode all authorized payloads, not just successful ones so an unsuccesful command error can be communicated
+
 Release: 0.3.1
 --------------
 * [Issue #27](https://github.com/chef/winrm-s/pull/27): Fixes problem with AllowUnencrypted being true and using negotiate
