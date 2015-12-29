@@ -66,7 +66,7 @@ module WinRM
         output = Output.new
         REXML::XPath.match(resp_doc, "//#{NS_WIN_SHELL}:Stream").each do |n|
           next if n.text.nil? || n.text.empty?
-          stream = { n.attributes['Name'].to_sym => Base64.decode64(n.text) }
+          stream = { n.attributes['Name'].to_sym => Base64.decode64(n.text).force_encoding('utf-8').sub("\xEF\xBB\xBF", "") }
           output[:data] << stream
           yield stream[:stdout], stream[:stderr] if block_given?
         end
