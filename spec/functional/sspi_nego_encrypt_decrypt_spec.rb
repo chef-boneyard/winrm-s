@@ -10,7 +10,7 @@ def assert_prerequisites
 end
 
 
-describe "Test sspinegotiate with encrypt/decrypt via WinRM", :windows_and_func_spec_enabled do
+describe "Test sspinegotiate with encrypt/decrypt via WinRM" do
   before(:all) do
     assert_prerequisites
     # Remember the user setting.
@@ -21,7 +21,7 @@ describe "Test sspinegotiate with encrypt/decrypt via WinRM", :windows_and_func_
 
   before do
     %x{winrm set winrm/config/service @{AllowUnencrypted="false"}}
-    @winrm = WinRM::WinRMWebService.new(ENV["test_winrm_endpoint"], :sspinegotiate, :user => ENV["test_winrm_user"], :pass => ENV["test_winrm_pass"])
+    @winrm = WinRM::WinRMWebService.new(ENV["test_winrm_endpoint"], :sspinegotiate, :user => ENV["test_winrm_user"].dup, :pass => ENV["test_winrm_pass"].dup)
   end
 
   after(:all) do
@@ -46,20 +46,5 @@ describe "Test sspinegotiate with encrypt/decrypt via WinRM", :windows_and_func_
       outvar << stdout
     end
     expect(outvar).to match(/Windows IP Configuration/)
-  end
-
-  describe "Negative test:" do
-    before do
-      %x{winrm set winrm/config/service @{AllowUnencrypted="true"}}
-    end
-    after do
-      %x{winrm set winrm/config/service @{AllowUnencrypted="false"}}
-    end
-
-    describe "when AllowUnencrypted is set to true" do
-      it "should raise an exception" do
-        expect{@winrm.run_cmd('ipconfig')}.to raise_exception
-      end
-    end
   end
 end
