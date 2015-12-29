@@ -3,7 +3,7 @@ require 'rspec/core/rake_task'
 
 Bundler::GemHelper.install_tasks
 
-task :default => [:unit_spec, :functional_spec]
+task :default => [:unit_spec]
 
 desc "Run all functional specs in spec directory"
 RSpec::Core::RakeTask.new(:functional_spec) do |t|
