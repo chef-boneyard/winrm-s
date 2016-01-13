@@ -1,6 +1,7 @@
 # winrm-s  Change Log
-Unreleased
+Release: 0.3.3
 --------------
+* Do not emit warnings for either httpclient versions 2.6 or 2.7
 
 Release: 0.3.2
 --------------
