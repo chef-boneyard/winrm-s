@@ -1,4 +1,8 @@
 # winrm-s  Change Log
+Release: 0.3.4
+--------------
+* [Issue #32](https://github.com/chef/winrm-s/issues/32): Fixes incompatibility with winrm 1.5
+
 Release: 0.3.3
 --------------
 * Do not emit warnings for either httpclient versions 2.6 or 2.7
