@@ -17,6 +17,7 @@ module WinRM
       @timeout = DEFAULT_TIMEOUT
       @max_env_sz = DEFAULT_MAX_ENV_SIZE 
       @locale = DEFAULT_LOCALE
+      @logger = Logging.logger[self]
       case transport
       when :kerberos
         require 'gssapi'
