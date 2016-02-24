@@ -1,4 +1,8 @@
 # winrm-s  Change Log
+Release: 0.3.6
+--------------
+* Fixes syntax error in winrm initializer
+
 Release: 0.3.5
 --------------
 * Fixes incompatibility with winrm 1.6 where a consuming gem sets the transport option to `:negotiate` and results in an error since this gem has no awareness of that setting
