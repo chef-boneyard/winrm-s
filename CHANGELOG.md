@@ -1,4 +1,8 @@
 # winrm-s  Change Log
+Release: 0.3.5
+--------------
+* Fixes incompatibility with winrm 1.6 where a consuming gem sets the transport option to `:negotiate` and results in an error since this gem has no awareness of that setting
+
 Release: 0.3.4
 --------------
 * [Issue #32](https://github.com/chef/winrm-s/issues/32): Fixes incompatibility with winrm 1.5

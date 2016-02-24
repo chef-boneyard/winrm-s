@@ -29,7 +29,8 @@ module WinRM
         @xfer = HTTP::HttpSSPINegotiate.new(endpoint, opts[:user], opts[:pass], opts)
       when :ssl
         @xfer = HTTP::HttpSSL.new(endpoint, opts[:user], opts[:pass], opts[:ca_trust_path], opts)
-      end
+      when :negotiate
+        @xfer = HTTP::HttpNegotiate.new(endpoint, opts[:user], opts[:pass], opts)
     end
 
     # Get the builder obj for output request
