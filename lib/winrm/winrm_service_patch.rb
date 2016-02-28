@@ -60,13 +60,14 @@ module WinRM
     #   the console.
     def get_command_output(shell_id, command_id, &block)
       done_elems = []
+      output = Output.new
+
       while done_elems.empty?
         resp_doc = nil
         builder = get_builder_obj(shell_id, command_id, &block)
         request_msg = builder.target!
         resp_doc = send_get_output_message(request_msg)
 
-        output = Output.new
         REXML::XPath.match(resp_doc, "//#{NS_WIN_SHELL}:Stream").each do |n|
           next if n.text.nil? || n.text.empty?
           stream = { n.attributes['Name'].to_sym => Base64.decode64(n.text).force_encoding('utf-8').sub("\xEF\xBB\xBF", "") }

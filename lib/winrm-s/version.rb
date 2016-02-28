@@ -17,6 +17,6 @@
 #
 
 module WinrmS
-  VERSION = "0.3.6"
+  VERSION = "0.3.7.dev"
   MAJOR, MINOR, TINY = VERSION.split('.')
 end

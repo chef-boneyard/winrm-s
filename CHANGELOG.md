@@ -1,4 +1,8 @@
 # winrm-s  Change Log
+Release: 0.3.7.dev
+--------------
+* Fixes output parsing when output spans multiple responses
+
 Release: 0.3.6
 --------------
 * Fixes syntax error in winrm initializer
