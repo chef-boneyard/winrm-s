@@ -10,6 +10,11 @@ This extended functionality is **only** supported when running on Microsoft
 Windows. This gem can still be used on other operating systems just like the
 `WinRM` gem, but the extended capabilities will not be available.
 
+Deprecation Notice
+------------------
+
+The functionality provided by this library has been merged into [winrm](https://github.com/WinRb/WinRM) and [rubyntlm](https://github.com/WinRb/rubyntlm). This library is no longer used or maintained.
+
 Installation
 ------------
 
